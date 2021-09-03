@@ -826,7 +826,7 @@ HRESULT __stdcall hookD3D11Present1(IDXGISwapChain* pSwapChain, UINT SyncInterva
 				yy = (ViewportHeight / 2.0f) - ((my / mw) * (ViewportHeight / 2.0f)); //- or + depends on the game
 
 				if (mw > 0.0f) {
-					sprintf(buff, "%s %.0f %0.f", object->type, dist, asteroidsSubData[i].maxDist);
+					sprintf(buff, "%s %.0f %0.f", object->type, asteroidsSubData[i].maxDist, dist);
 					if (asteroidsSubData[i].ptr == object && asteroidsSubData[i].maxDist > 3300) {
 						ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(2560 - xx, 1440 - yy), ImColor(193, 137, 0, 255), buff, 0, 0.0f, 0);
 					} else if (asteroidsSubData[i].ptr == object && asteroidsSubData[i].maxDist > 2700) {
