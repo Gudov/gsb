@@ -201,6 +201,7 @@
     <ClCompile Include="luaHooks.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="physics.cpp" />
+    <ClCompile Include="render.cpp" />
     <ClCompile Include="threads.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -254,6 +255,7 @@
     <ClInclude Include="luaExecutor.h" />
     <ClInclude Include="luaHooks.h" />
     <ClInclude Include="physics.h" />
+    <ClInclude Include="render.h" />
     <ClInclude Include="threads.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
