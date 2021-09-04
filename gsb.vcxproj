@@ -180,8 +180,27 @@
     <ClCompile Include="..\lua-5.3.5\lutf8lib.c" />
     <ClCompile Include="..\lua-5.3.5\lvm.c" />
     <ClCompile Include="..\lua-5.3.5\lzio.c" />
+    <ClCompile Include="asteroidEsp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="console.cpp" />
-    <ClCompile Include="dxHooks.cpp" />
+    <ClCompile Include="dxHooks.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent>true</DeploymentContent>
+    </ClCompile>
+    <ClCompile Include="dxHooks2.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="dxShadersDump.cpp" />
+    <ClCompile Include="dxShadersHook.cpp" />
+    <ClCompile Include="dxUtils.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="fnv1a.cpp" />
     <ClCompile Include="gameHooks.cpp" />
     <ClCompile Include="hookUtils.cpp" />
     <ClCompile Include="libs\imgui\imgui.cpp" />
@@ -200,8 +219,17 @@
     <ClCompile Include="luaExecutor.cpp" />
     <ClCompile Include="luaHooks.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="menu.cpp" />
+    <ClCompile Include="physicEsp.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="physics.cpp" />
-    <ClCompile Include="render.cpp" />
+    <ClCompile Include="physUtils.cpp" />
+    <ClCompile Include="render.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="threads.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -231,9 +259,32 @@
     <ClInclude Include="..\lua-5.3.5\lundump.h" />
     <ClInclude Include="..\lua-5.3.5\lvm.h" />
     <ClInclude Include="..\lua-5.3.5\lzio.h" />
+    <ClInclude Include="asteroidEsp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="console.h" />
-    <ClInclude Include="dxHooks.h" />
-    <ClInclude Include="dxHookUtils.h" />
+    <ClInclude Include="dxHooks.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <DeploymentContent>true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="dxHooks2.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="dxHookUtils.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+      <DeploymentContent>true</DeploymentContent>
+    </ClInclude>
+    <ClInclude Include="dxShadersDump.h" />
+    <ClInclude Include="dxShadersHook.h" />
+    <ClInclude Include="dxUtils.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="fnv1a.h" />
     <ClInclude Include="gameHooks.h" />
     <ClInclude Include="hookUtils.h" />
     <ClInclude Include="libs\imgui\imconfig.h" />
@@ -254,8 +305,17 @@
     <ClInclude Include="libs\Minhook\src\trampoline.h" />
     <ClInclude Include="luaExecutor.h" />
     <ClInclude Include="luaHooks.h" />
+    <ClInclude Include="menu.h" />
+    <ClInclude Include="physicEsp.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="physics.h" />
-    <ClInclude Include="render.h" />
+    <ClInclude Include="physUtils.h" />
+    <ClInclude Include="render.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="threads.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

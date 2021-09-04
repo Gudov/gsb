@@ -67,7 +67,7 @@ void ShaderHook(ID3D11Device* device, const char* type, const void** bytecode, S
 		} else if (level == D3D_FEATURE_LEVEL_10_0) {
 			version = 40;
 		} else {
-			// TODO: report error
+			MessageBoxA(nullptr, "errorOnShaderVersion", "errorOnShaderVersion", MB_OK);
 			return;
 		}
 

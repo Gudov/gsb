@@ -10,6 +10,9 @@
 #include "render.h"
 #include "menu.h"
 #include "dxUtils.h"
+#include "physUtils.h"
+#include "asteroidEsp.h"
+#include "physicEsp.h"
 
 typedef HRESULT(__stdcall* D3D11Present1Hook) (IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags, const DXGI_PRESENT_PARAMETERS* pPresentParameters);
 typedef void(__stdcall* D3D11DrawHook) (ID3D11DeviceContext* pContext, UINT VertexCount, UINT StartVertexLocation);
@@ -117,6 +120,21 @@ HRESULT __stdcall hookD3D11Present1(IDXGISwapChain* pSwapChain, UINT SyncInterva
 
 	drawMenu();
 
+	if (initonce) {
+		std::vector<bodyData> bodys = generateBodyData();
+		bodyData ply = getPlyByMass(bodys);
+		setCamPos(ply.pos);
+
+		ImGui::Begin("Transparent", reinterpret_cast<bool*>(true), ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoNav | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoBackground);
+		ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+		ImGui::SetWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y), ImGuiCond_Always);
+
+		drawAsteroidESP(ply);
+		drawPhisicEsp(bodys, ply);
+
+		ImGui::End();
+	}
+
 	ImGui::Render();
 	pContext->OMSetRenderTargets(1, &mainRenderTargetViewD3D11, NULL);
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
@@ -126,7 +144,7 @@ HRESULT __stdcall hookD3D11Present1(IDXGISwapChain* pSwapChain, UINT SyncInterva
 
 void __stdcall hookD3D11Draw(ID3D11DeviceContext* pContext, UINT VertexCount, UINT StartVertexLocation) {
 	ID3D11Buffer* veBuffer;
-	UINT veWidth;
+	UINT veWidth = 0;
 	UINT Stride;
 	UINT veBufferOffset;
 	D3D11_BUFFER_DESC veDesc;
@@ -157,7 +175,7 @@ void __stdcall hookD3D11Draw(ID3D11DeviceContext* pContext, UINT VertexCount, UI
 		pscBuffer = NULL;
 	}
 
-	if (veWidth / 100 == 24) {
+	if (initonce && veWidth / 100 == 24) {
 		ID3D11Buffer* pWorldViewCB;
 		pContext->VSGetConstantBuffers(0, 1, &pWorldViewCB);
 		ID3D11Buffer* m_pCurWorldViewCB = NULL;
@@ -167,7 +185,11 @@ void __stdcall hookD3D11Draw(ID3D11DeviceContext* pContext, UINT VertexCount, UI
 		MapBuffer(pContext, m_pCurWorldViewCB, (void**)&worldviewPtr, NULL);
 		memcpy(getStaticGameWorldView(), &worldviewPtr[0], sizeof(float[4][4]));
 		UnmapBuffer(pContext, m_pCurWorldViewCB);
+
+		updateWorldViewProj();
 	}
+
+	return phookD3D11Draw(pContext, VertexCount, StartVertexLocation);
 }
 
 HRESULT STDMETHODCALLTYPE CreateSwapChainForHwnd_hook(IDXGIFactory2* This, _In_  ID3D11Device* pDevice, _In_  HWND hWnd, _In_ const DXGI_SWAP_CHAIN_DESC1* pDesc, _In_opt_  const DXGI_SWAP_CHAIN_FULLSCREEN_DESC* pFullscreenDesc, _In_opt_  IDXGIOutput* pRestrictToOutput, _COM_Outptr_  IDXGISwapChain1** ppSwapChain) {

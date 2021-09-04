@@ -3,8 +3,41 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
+#include <vector>
+#include <unordered_map>
 
 static bool showmenu = false;
+static std::unordered_map<std::string, bool> optionsBool;
+static std::unordered_map<std::string, float> optionsFloat;
+static std::unordered_map<std::string, char*> optionsString;
+
+bool getOptionBool(std::string name, bool def) {
+	auto find = optionsBool.find(name);
+	if (find != optionsBool.end()) {
+		return find->second;
+	} else {
+		return def;
+	}
+}
+
+float getOptionFloat(std::string name, float def) {
+	auto find = optionsFloat.find(name);
+	if (find != optionsFloat.end()) {
+		return find->second;
+	} else {
+		return def;
+	}
+}
+
+char* getOptionString(std::string name, const char* def) {
+	auto find = optionsString.find(name);
+	if (find != optionsString.end()) {
+		return find->second;
+	} else {
+		return (char*)def;
+	}
+}
+
 
 void drawMenu() {
 	if (GetAsyncKeyState(VK_INSERT) & 1) {
@@ -13,6 +46,26 @@ void drawMenu() {
 
 	if (showmenu) {
 		ImGui::Begin("Menu");
+
+		static char asteroidFilter[256] = "ore";
+		ImGui::InputText("asteroidFilter", asteroidFilter, 255);
+		optionsString["asteroidFilter"] = asteroidFilter;
+
+		static bool drawNearAsteroid = false;
+		ImGui::Checkbox("drawNearAsteroid", &drawNearAsteroid);
+		optionsBool["drawNearAsteroid"] = drawNearAsteroid;
+
+		static bool drawFarAsteroid = true;
+		ImGui::Checkbox("drawFarAsteroid", &drawFarAsteroid);
+		optionsBool["drawFarAsteroid"] = drawFarAsteroid;
+
+		static bool drawAsteroidLine = true;
+		ImGui::Checkbox("drawAsteroidLine", &drawAsteroidLine);
+		optionsBool["drawAsteroidLine"] = drawAsteroidLine;
+
+		static bool drawPhysMass = false;
+		ImGui::Checkbox("drawPhysMass", &drawPhysMass);
+		optionsBool["drawPhysMass"] = drawPhysMass;
 
 		/*ImGui::Checkbox("Modelrecfinder", &modelrecfinder);
 		if (modelrecfinder == 1)

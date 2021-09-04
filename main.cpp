@@ -19,8 +19,9 @@
 #include "gameHooks.h"
 #include "luaExecutor.h"
 #include "hookUtils.h"
-#include "dxHooks.h"
+//#include "dxHooks.h"
 #include "physics.h"
+#include "dxHooks2.h"
 
 static bool __fastcall comapreClass(__int64 a1, __int64 a2)
 {
@@ -42,7 +43,8 @@ int main()
 	MH_Initialize();
 	//initLuaHook();
 	initGameHooks();
-	initDxHook();
+	//initDxHook();
+	initDxHooks2();
 
 	pauseAllThreads(false);
 
@@ -50,47 +52,7 @@ int main()
 		char buff[4096];
 		//fscanf(Con::fpin, "%s", buff);
 		fgets(buff, 4000, Con::fpin);
-		if (buff[0] == '$') {
-			//FILE* f = fopen("objects.txt", "w");
-			
-			void* phys = getPhysClass();
-			for (int i = 0; i < 0xFFFFFF; i++) {
-				if (physList[i].entry != nullptr
-				 && ((physList[i].entry->id & 0xFFFFFF) == (physList[i].id & 0xFFFFFF))) {
-					physx::PxActor* actor = physList[i].entry->actor;
-					physx::PxRigidActor* rigid = actor->is<physx::PxRigidActor>();
-					physx::PxVec3 pos = rigid->getGlobalPose().p;
-					bool isBody = actor->is<physx::PxRigidBody>() != nullptr;
-					bool isStatic = actor->is<physx::PxRigidBody>() != nullptr;
-					float mass = -1;
-					if (isBody) {
-						physx::PxRigidBody* body = actor->is<physx::PxRigidBody>();
-						mass = body->getMass();
-					}
-					fprintf(Con::fpout, "pos %.2f %.2f %.2f %d %.2f %llx %llx\n", pos.x, pos.y, pos.z, int(isBody), mass, actor->userData, actor);
-					fflush(Con::fpout);
-				} else {
-					if ((physList[i].id & 0xFFFFFF) != (i & 0xFFFFFF)) {
-						break;
-					}
-				}
-/*				if (physList[i].actor != nullptr) {
-					if (physList[i].id != i) {
-						break;
-					}
-					physx::PxActor* actor = physList[i].actor;
-					physx::PxRigidActor* rigid = actor->is<physx::PxRigidActor>();
-					physx::PxVec3 pos = rigid->getGlobalPose().p;
-					fprintf(Con::fpout, "pos %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
-					fflush(Con::fpout);
-				}*/
-			}
-			fflush(Con::fpout);
-			//fclose(f);
-			//maybeOpenDebug();
-		} else {
-			setRunString(buff);
-		}
+		setRunString(buff);
 	}
 
 	return 0;

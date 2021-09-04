@@ -703,7 +703,8 @@ HRESULT __stdcall hookD3D11Present1(IDXGISwapChain* pSwapChain, UINT SyncInterva
 			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(20, 410), ImColor(0, 255, 255, 255), buff, 0, 0.0f, 0); //draw text
 
 			DirectX::XMMATRIX maybeView;
-			DirectX::XMMATRIX localWorld = maybeView = DirectX::XMMatrixTranspose(*((FXMMATRIX*)matWorldView));
+			//DirectX::XMMATRIX localWorld = maybeView = DirectX::XMMatrixTranspose(*((FXMMATRIX*)matWorldView));
+			DirectX::XMMATRIX localWorld = maybeView = DirectX::XMMatrixTranspose(*((FXMMATRIX*)worldView));
 			maybeView.r[0] = localWorld.r[0];
 			maybeView.r[1] = localWorld.r[1];
 			maybeView.r[2] = localWorld.r[2];
@@ -1252,7 +1253,7 @@ void __stdcall hookD3D11Draw(ID3D11DeviceContext* pContext, UINT VertexCount, UI
 		pscBuffer = NULL;
 	}
 
-	if (Draw == 0 && veWidth / 100 == 24) {
+	if (initonce && veWidth / 100 == 24) {
 		ID3D11Buffer* pWorldViewCB;
 		pContext->VSGetConstantBuffers(0, 1, &pWorldViewCB);
 		ID3D11Buffer* m_pCurWorldViewCB = NULL;
@@ -1487,21 +1488,21 @@ HRESULT STDMETHODCALLTYPE CreateSwapChainForHwnd_hook(
 
 	MH_Initialize();
 	//if (status != MH_OK) { MessageBoxA(nullptr, "MH_Initialize", "MH_Initialize", MB_OK); }
-	if (MH_CreateHook((DWORD_PTR*)pSwapChainVtable[8], hookD3D11Present, reinterpret_cast<void**>(&phookD3D11Present)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present", "hookD3D11Present", MB_OK); }
-	if (MH_EnableHook((DWORD_PTR*)pSwapChainVtable[8]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present", "hookD3D11Present", MB_OK); }
+	// if (MH_CreateHook((DWORD_PTR*)pSwapChainVtable[8], hookD3D11Present, reinterpret_cast<void**>(&phookD3D11Present)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present", "hookD3D11Present", MB_OK); }
+	// if (MH_EnableHook((DWORD_PTR*)pSwapChainVtable[8]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present", "hookD3D11Present", MB_OK); }
 	if (MH_CreateHook((DWORD_PTR*)pSwapChainVtable[22], hookD3D11Present1, reinterpret_cast<void**>(&phookD3D11Present1)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present1", "hookD3D11Present1", MB_OK); }
 	if (MH_EnableHook((DWORD_PTR*)pSwapChainVtable[22]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11Present1", "hookD3D11Present1", MB_OK); }
-	if (MH_CreateHook((DWORD_PTR*)pSwapChainVtable[13], hookD3D11ResizeBuffers, reinterpret_cast<void**>(&phookD3D11ResizeBuffers)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11ResizeBuffers", "hookD3D11ResizeBuffers", MB_OK); }
-	if (MH_EnableHook((DWORD_PTR*)pSwapChainVtable[13]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11ResizeBuffers", "hookD3D11ResizeBuffers", MB_OK); }
+	// if (MH_CreateHook((DWORD_PTR*)pSwapChainVtable[13], hookD3D11ResizeBuffers, reinterpret_cast<void**>(&phookD3D11ResizeBuffers)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11ResizeBuffers", "hookD3D11ResizeBuffers", MB_OK); }
+	// if (MH_EnableHook((DWORD_PTR*)pSwapChainVtable[13]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11ResizeBuffers", "hookD3D11ResizeBuffers", MB_OK); }
 
 	//MessageBoxA(nullptr, "Present", "Present", MB_OK);
 	//(*ppSwapChain)->Present(1,2); // 8
 	//(*ppSwapChain)->Present1(1, 2, nullptr); // 22
 
-	if (MH_CreateHook((DWORD_PTR*)pContextVTable[12], hookD3D11DrawIndexed, reinterpret_cast<void**>(&phookD3D11DrawIndexed)) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
-	if (MH_EnableHook((DWORD_PTR*)pContextVTable[12]) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
-	if (MH_CreateHook((DWORD_PTR*)pContextVTable[20], hookD3D11DrawIndexedInstanced, reinterpret_cast<void**>(&phookD3D11DrawIndexedInstanced)) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
-	if (MH_EnableHook((DWORD_PTR*)pContextVTable[20]) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
+	// if (MH_CreateHook((DWORD_PTR*)pContextVTable[12], hookD3D11DrawIndexed, reinterpret_cast<void**>(&phookD3D11DrawIndexed)) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
+	// if (MH_EnableHook((DWORD_PTR*)pContextVTable[12]) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
+	// if (MH_CreateHook((DWORD_PTR*)pContextVTable[20], hookD3D11DrawIndexedInstanced, reinterpret_cast<void**>(&phookD3D11DrawIndexedInstanced)) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
+	// if (MH_EnableHook((DWORD_PTR*)pContextVTable[20]) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
 	if (MH_CreateHook((DWORD_PTR*)pContextVTable[13], hookD3D11Draw, reinterpret_cast<void**>(&phookD3D11Draw)) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
 	if (MH_EnableHook((DWORD_PTR*)pContextVTable[13]) != MH_OK) { MessageBoxA(nullptr, "A", "B", MB_OK); }
 	//DrawInstanced
@@ -1510,8 +1511,8 @@ HRESULT STDMETHODCALLTYPE CreateSwapChainForHwnd_hook(
 
 	//if (MH_CreateHook((DWORD_PTR*)pContextVTable[8], hookD3D11PSSetShaderResources, reinterpret_cast<void**>(&phookD3D11PSSetShaderResources)) != MH_OK) { return 1; }
 	//if (MH_EnableHook((DWORD_PTR*)pContextVTable[8]) != MH_OK) { return 1; }
-	if (MH_CreateHook((DWORD_PTR*)pContextVTable[7], hookD3D11VSSetConstantBuffers, reinterpret_cast<void**>(&phookD3D11VSSetConstantBuffers)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11VSSetConstantBuffers", "hookD3D11VSSetConstantBuffers", MB_OK); }
-	if (MH_EnableHook((DWORD_PTR*)pContextVTable[7]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11VSSetConstantBuffers", "hookD3D11VSSetConstantBuffers", MB_OK); }
+	// if (MH_CreateHook((DWORD_PTR*)pContextVTable[7], hookD3D11VSSetConstantBuffers, reinterpret_cast<void**>(&phookD3D11VSSetConstantBuffers)) != MH_OK) { MessageBoxA(nullptr, "hookD3D11VSSetConstantBuffers", "hookD3D11VSSetConstantBuffers", MB_OK); }
+	// if (MH_EnableHook((DWORD_PTR*)pContextVTable[7]) != MH_OK) { MessageBoxA(nullptr, "hookD3D11VSSetConstantBuffers", "hookD3D11VSSetConstantBuffers", MB_OK); }
 
 	//dump shader
 	if (MH_CreateHook((DWORD_PTR*)pDeviceVTable[15], PixelShaderHook, reinterpret_cast<void**>(&d3d11_CreatePixelShader)) != MH_OK) { MessageBoxA(nullptr, "PixelShaderHook", "PixelShaderHook", MB_OK); }
