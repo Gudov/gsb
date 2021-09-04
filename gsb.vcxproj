@@ -74,8 +74,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\starbase\gsb\libs\include;E:\starbase\lua-5.3.5;E:\starbase\gsb\libs\imgui;E:\starbase\gsb\libs\Minhook\include;E:\starbase\gsb\libs\PhysX\PhysX_3.4\Include;E:\starbase\gsb\libs\PhysX\PxShared\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\starbase\gsb\libs\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>libs\include;..\lua-5.3.5;libs\imgui;libs\Minhook\include;libs\PhysX\PhysX_3.4\Include;libs\PhysX\PxShared\include;$(IncludePath)</IncludePath>
+    <LibraryPath>libs\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -83,8 +83,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);E:\starbase\gsb\libs\lib</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);E:\starbase\gsb\libs\include;E:\starbase\lua-5.3.5;E:\starbase\gsb\libs\imgui;E:\starbase\gsb\libs\Minhook\include;E:\starbase\gsb\libs\PhysX\PhysX_3.4\Include;E:\starbase\gsb\libs\PhysX\PxShared\include</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);libs\lib</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);libs\include;..\lua-5.3.5;libs\imgui;libs\Minhook\include;libs\PhysX\PhysX_3.4\Include;libs\PhysX\PxShared\include</IncludePath>
     <TargetName>gsb_release</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
