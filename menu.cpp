@@ -47,9 +47,23 @@ void drawMenu() {
 	if (showmenu) {
 		ImGui::Begin("Menu");
 
+		static bool asteroidEspEnabled = true;
+		ImGui::Checkbox("asteroidEspEnabled", &asteroidEspEnabled);
+		optionsBool["asteroidEspEnabled"] = asteroidEspEnabled;
+
 		static char asteroidFilter[256] = "ore";
-		ImGui::InputText("asteroidFilter", asteroidFilter, 255);
+		if (ImGui::TreeNode("asteroidFilter")) {
+			ImGui::InputText("asteroidFilter", asteroidFilter, 255);
+			if (ImGui::Button("ice ore")) { strcpy(asteroidFilter, "ice"); }
+			if (ImGui::Button("ajatitite ore")) { strcpy(asteroidFilter, "ajat"); }
+			if (ImGui::Button("valkite ore")) { strcpy(asteroidFilter, "valki"); }
+			ImGui::TreePop();
+		}
 		optionsString["asteroidFilter"] = asteroidFilter;
+
+		static bool asteroidOreCheck = true;
+		ImGui::Checkbox("asteroidOreCheck", &asteroidOreCheck);
+		optionsBool["asteroidOreCheck"] = asteroidOreCheck;
 
 		static bool drawNearAsteroid = false;
 		ImGui::Checkbox("drawNearAsteroid", &drawNearAsteroid);
