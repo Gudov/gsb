@@ -175,7 +175,6 @@
     <ClCompile Include="..\lua-5.3.5\lstrlib.c" />
     <ClCompile Include="..\lua-5.3.5\ltable.c" />
     <ClCompile Include="..\lua-5.3.5\ltablib.c" />
-    <ClCompile Include="..\lua-5.3.5\ltests.c" />
     <ClCompile Include="..\lua-5.3.5\ltm.c" />
     <ClCompile Include="..\lua-5.3.5\lua.c" />
     <ClCompile Include="..\lua-5.3.5\lundump.c" />
@@ -253,7 +252,6 @@
     <ClInclude Include="..\lua-5.3.5\lstate.h" />
     <ClInclude Include="..\lua-5.3.5\lstring.h" />
     <ClInclude Include="..\lua-5.3.5\ltable.h" />
-    <ClInclude Include="..\lua-5.3.5\ltests.h" />
     <ClInclude Include="..\lua-5.3.5\ltm.h" />
     <ClInclude Include="..\lua-5.3.5\lua.h" />
     <ClInclude Include="..\lua-5.3.5\luaconf.h" />
@@ -265,6 +263,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="colors.h" />
     <ClInclude Include="console.h" />
     <ClInclude Include="dxHooks.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>

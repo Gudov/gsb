@@ -7,6 +7,7 @@
 #include <imgui_impl_dx11.h>
 #include "menu.h"
 
+
 struct AsteroidSubData {
 	float maxDist;
 	asteroidStruct* ptr;
@@ -27,16 +28,16 @@ static void drawAsteroid(physx::PxVec3 &pos, char* text, float dist, bool drawLi
 	if (dist > 3000 && drawFar) {
 		physx::PxVec2 screenPos = worldToScreen(pos);
 		if (screenPos.x > 0 && screenPos.y > 0) {
-			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), ImColor(193, 137, 0, 255), text, 0, 0.0f, 0);
+			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), Colors::farAsteroid, text, 0, 0.0f, 0);
 		}
 		if (drawLine) {
 			physx::PxVec2 linePos = worldToScreenIgnoreDirection(pos);
-			ImGui::GetWindowDrawList()->AddLine(ImVec2(linePos.x, linePos.y), ImVec2(io.DisplaySize.x / 2, io.DisplaySize.y / 2), ImColor(193, 137, 0, 255));
+			ImGui::GetWindowDrawList()->AddLine(ImVec2(linePos.x, linePos.y), ImVec2(io.DisplaySize.x / 2, io.DisplaySize.y / 2), Colors::lineFarAsteroid);
 		}
 	} else if (drawNear) {
 		physx::PxVec2 screenPos = worldToScreen(pos);
 		if (screenPos.x > 0 && screenPos.y > 0) {
-			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), ImColor(0, 255, 255, 255), text, 0, 0.0f, 0);
+			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), Colors::nearAsteroid, text, 0, 0.0f, 0);
 		}
 	}
 }
@@ -70,6 +71,10 @@ static bool testObjectPtr(asteroidStruct* object) {
 }
 
 void drawAsteroidESP(bodyData ply) {
+
+	bool asteroidEspEnabled = getOptionBool("asteroidEspEnabled", false);
+	if (!asteroidEspEnabled) return;
+
 	if (objectManager == 0) {
 		return;
 	}

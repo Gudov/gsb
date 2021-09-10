@@ -5,11 +5,81 @@
 #include <imgui_impl_dx11.h>
 #include <vector>
 #include <unordered_map>
+#include <json.hpp>
+#include <string>
+#include <fstream>
+#include <streambuf>
+
+#include <iostream>
+#include <filesystem>
+
+using nlohmann::json;
 
 static bool showmenu = false;
 static std::unordered_map<std::string, bool> optionsBool;
 static std::unordered_map<std::string, float> optionsFloat;
 static std::unordered_map<std::string, char*> optionsString;
+
+namespace Colors {
+	ImColor nearAsteroid = ImColor(0, 255, 255, 255);
+	ImColor farAsteroid = ImColor(193, 137, 0, 255);
+	ImColor lineFarAsteroid = ImColor(193, 137, 0, 255);
+}
+
+void imColorTofloat4(ImColor col, float b[4]) {
+	ImVec4 vector4 = col.Value;
+	b[0] = vector4.x;
+	b[1] = vector4.y;
+	b[2] = vector4.z;
+	b[3] = vector4.w;
+};
+
+
+json config;
+void load_config(std::string config_file)
+{
+	std::ifstream file(config_file);
+	std::string str((std::istreambuf_iterator<char>(file)),
+	std::istreambuf_iterator<char>());
+	config = json::parse(str);
+
+	//optionsBool = config["optionsBool"];
+
+}
+
+
+void update_config() {
+	config["optionsBool"] = optionsBool;
+	config["optionsFloat"] = optionsFloat;
+	config["optionsString"] = optionsString;
+
+	float buff[4];
+
+	imColorTofloat4(Colors::nearAsteroid, buff);
+	config["nearAsteroid"] = buff;
+
+	imColorTofloat4(Colors::farAsteroid, buff);
+	config["farAsteroid"] = buff;
+
+	imColorTofloat4(Colors::lineFarAsteroid, buff);
+	config["lineFarAsteroid"] = buff;
+}
+
+void save_config(json config) 
+{
+	update_config();
+	std::ofstream config_file;
+	config_file.open("gsb.cfg");
+	config_file << config.dump();
+	config_file.close();
+};
+
+
+
+
+ImColor float4toImColor(float* col) {
+	return ImColor(col[0], col[1], col[2], col[3]);
+};
 
 bool getOptionBool(std::string name, bool def) {
 	auto find = optionsBool.find(name);
@@ -45,11 +115,15 @@ void drawMenu() {
 	}
 
 	if (showmenu) {
+		//static bool demowindow = true;
+		//ImGui::ShowDemoWindow(&demowindow);
+
 		ImGui::Begin("Menu");
 
 		static bool asteroidEspEnabled = true;
 		ImGui::Checkbox("asteroidEspEnabled", &asteroidEspEnabled);
 		optionsBool["asteroidEspEnabled"] = asteroidEspEnabled;
+
 
 		static char asteroidFilter[256] = "ore";
 		if (ImGui::TreeNode("asteroidFilter")) {
@@ -59,24 +133,42 @@ void drawMenu() {
 			if (ImGui::Button("valkite ore")) { strcpy(asteroidFilter, "valki"); }
 			ImGui::TreePop();
 		}
+
 		optionsString["asteroidFilter"] = asteroidFilter;
 
 		static bool asteroidOreCheck = true;
 		ImGui::Checkbox("asteroidOreCheck", &asteroidOreCheck);
 		optionsBool["asteroidOreCheck"] = asteroidOreCheck;
 
+
 		static bool drawNearAsteroid = false;
+		float colorBuff[4];
+		imColorTofloat4(Colors::nearAsteroid, colorBuff);
+
+		ImGui::ColorEdit4("NearAstreoidColor", colorBuff, ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoLabel);
+		Colors::nearAsteroid = float4toImColor(colorBuff);
+		ImGui::SameLine();
 		ImGui::Checkbox("drawNearAsteroid", &drawNearAsteroid);
 		optionsBool["drawNearAsteroid"] = drawNearAsteroid;
 
+
 		static bool drawFarAsteroid = true;
+		imColorTofloat4(Colors::farAsteroid, colorBuff);
+		ImGui::ColorEdit4("FarAsteroidColor", colorBuff, ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoLabel);
+		Colors::farAsteroid = float4toImColor(colorBuff);
+		ImGui::SameLine();
 		ImGui::Checkbox("drawFarAsteroid", &drawFarAsteroid);
 		optionsBool["drawFarAsteroid"] = drawFarAsteroid;
 
+
 		static bool drawAsteroidLine = true;
+		imColorTofloat4(Colors::lineFarAsteroid, colorBuff);
+		ImGui::ColorEdit4("AsteroidLine", colorBuff, ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoLabel);
+		Colors::lineFarAsteroid = float4toImColor(colorBuff);
+		ImGui::SameLine();
 		ImGui::Checkbox("drawAsteroidLine", &drawAsteroidLine);
 		optionsBool["drawAsteroidLine"] = drawAsteroidLine;
-
+		
 		static bool drawPhysMass = false;
 		ImGui::Checkbox("drawPhysMass", &drawPhysMass);
 		optionsBool["drawPhysMass"] = drawPhysMass;
