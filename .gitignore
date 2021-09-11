@@ -1,0 +1,6 @@
+**/x64
+.git
+.bannedfiles
+**/.vs
+**/.git
+
