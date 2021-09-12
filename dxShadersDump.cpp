@@ -6,36 +6,26 @@
 #define SAFE_RELEASE(x) if (x) { x->Release(); x = NULL; }
 
 static WCHAR d3d11_shaders[MAX_PATH] = L"shaders";
-static void ShaderDump(const char* type, const char* ext, uint64_t id, const void* data, DWORD size)
-{
+static void ShaderDump(const char* type, const char* ext, uint64_t id, const void* data, DWORD size) {
 	CreateDirectoryW(d3d11_shaders, NULL);
 
 	WCHAR path[1024];
 	wsprintfW(path, L"%s\\%S_%016I64x.%S", d3d11_shaders, type, id, ext);
 
 	HANDLE f = CreateFileW(path, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
-	if (f != INVALID_HANDLE_VALUE)
-	{
+	if (f != INVALID_HANDLE_VALUE) {
 		DWORD written;
 		BOOL ok = WriteFile(f, data, size, &written, NULL);
-		if (!ok || written != size)
-		{
-			// TODO: report error
-			//MessageBoxA(nullptr, "dumpShader", "Error writing to file!", MB_OK);
-			//CHECK_FATAL(0, "Error writing to file!");
+		if (!ok || written != size) {
+			MessageBoxA(nullptr, "dumpShader", "Error writing to file!", MB_OK);
 		}
 		CloseHandle(f);
-	}
-	else
-	{
-		// TODO: report error
-		//MessageBoxA(nullptr, "dumpShader", "Error creating output file!", MB_OK);
-		//CHECK_FATAL(0, "Error creating output file!");
+	} else {
+		MessageBoxA(nullptr, "dumpShader", "Error creating output file!", MB_OK);
 	}
 }
 
-static void ShaderDisassemble(const char* type, uint64_t id, const void* bytecode, DWORD bytecode_size)
-{
+static void ShaderDisassemble(const char* type, uint64_t id, const void* bytecode, DWORD bytecode_size) {
 	UINT flags = D3D_DISASM_ENABLE_DEFAULT_VALUE_PRINTS | D3D_DISASM_ENABLE_INSTRUCTION_OFFSET;
 
 	ID3DBlob* blob;

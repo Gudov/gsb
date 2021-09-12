@@ -21,8 +21,6 @@ int testDumps = 0;
 
 static int writer(lua_State* L, const void* b, size_t size, void* B) {
 	(void)L;
-	//luaL_addlstring((luaL_Buffer*)B, (const char*)b, size);
-	//fprintf(Con::fpout, "try to write: %s\n", int(size));
 	fwrite(b, 1, size, (FILE*)B);
 	return 0;
 }
@@ -41,27 +39,21 @@ void f_parser_hook(lua_State *L, void* ud) {
 	fclose(file);
 }
 
-int errorHandler(lua_State* L)
-{
-	//stack: err
+int errorHandler(lua_State* L) {
 	const char* err = lua_tostring(L, 1);
 
 	fprintf(Con::fpout, "Error:%s\n", err);
 	fflush(Con::fpout);
 
-	lua_getglobal(L, "debug"); // stack: err debug
-	lua_getfield(L, -1, "traceback"); // stack: err debug debug.traceback
+	lua_getglobal(L, "debug");
+	lua_getfield(L, -1, "traceback");
 
-	// debug.traceback() возвращает 1 значение
-	if (lua_pcall(L, 0, 1, 0))
-	{
+	if (lua_pcall(L, 0, 1, 0)) {
 		const char* err = lua_tostring(L, -1);
 
 		fprintf(Con::fpout, "Error in debug.traceback() call: %s\n", err);
 		fflush(Con::fpout);
-	}
-	else
-	{
+	} else {
 		const char* stackTrace = lua_tostring(L, -1);
 
 		fprintf(Con::fpout, "C++ stack traceback: %s\n", stackTrace);
@@ -71,8 +63,7 @@ int errorHandler(lua_State* L)
 	return 1;
 }
 
-int gsb_print(lua_State *L)
-{
+int gsb_print(lua_State *L) {
     const char *str = lua_tolstring_sb(L, 1, 0);
 	fprintf(Con::fpout, "lua: %s\n", str);
 	fflush(Con::fpout);
@@ -80,12 +71,8 @@ int gsb_print(lua_State *L)
 }
 
 int lua_rawgeti_hook(lua_State* L, int idx, lua_Integer n) {
-	//fprintf(Con::fpout, "test call\n");
-
 	if (isRunString()) {
 		Con::enableStdout(true);
-		//lua_pushcclosure_sb(L, errorHandler, 0i64);
-		//L->errfunc = L->top - L->stack;
 
 		lua_pushcclosure_sb(L, luaB_print, 0i64);
 		lua_setglobal_sb(L, "gprint");
@@ -95,8 +82,7 @@ int lua_rawgeti_hook(lua_State* L, int idx, lua_Integer n) {
 		if (status != 0) {
 			fprintf(Con::fpout, "error on load: %s\n", lua_tostring(L, -1));
 			fflush(Con::fpout);
-		}
-		else {
+		} else {
 			status = lua_pcallk_sb(L, 0, 0, -2, 0, 0);
 			if (status) {
 				fprintf(Con::fpout, "pcall error: %d\n", status);
@@ -126,6 +112,6 @@ void initLuaHook() {
 	lua_pushcclosure_sb = (lua_pushcclosure_type)GetProcAddress(luaDll, "lua_pushcclosure");
 	lua_tolstring_sb = (lua_tolstring_type)GetProcAddress(luaDll, "lua_tolstring");
 	lua_rawgeti_sb = (lua_rawgeti_type)GetProcAddress(luaDll, "lua_rawgeti");
-	//MessageBoxA(nullptr, "a", "a", MB_OK);
+	
 	placeHook("lua_rawgeti", lua_rawgeti_sb, lua_rawgeti_hook);
 }

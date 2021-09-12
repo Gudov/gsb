@@ -92,7 +92,6 @@ static bool testObjectPtr(asteroidStruct* object) {
 }
 
 void drawAsteroidESP(bodyData ply) {
-
 	bool asteroidEspEnabled = getOption<bool>("asteroidEspEnabled");
 	if (!asteroidEspEnabled) return;
 

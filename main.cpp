@@ -23,17 +23,6 @@
 #include "physics.h"
 #include "dxHooks2.h"
 
-static bool __fastcall comapreClass(__int64 a1, __int64 a2)
-{
-	__int64 v3; // rdi
-
-	if (a1 == a2)
-		return 1;
-	v3 = *(unsigned int*)(a2 + 24);
-	return (unsigned int)v3 < *(uint32_t*)(a1 + 24)
-		&& *(uint64_t*)((*(uint64_t*)(a1 + 16) & 0xFFFFFFFFFFFFFFFCui64) + 8 * v3) == a2;
-}
-
 int main()
 {
 	Con::init();
@@ -41,9 +30,7 @@ int main()
 	pauseAllThreads(true);
 
 	MH_Initialize();
-	//initLuaHook();
 	initGameHooks();
-	//initDxHook();
 	initDxHooks2();
 
 	pauseAllThreads(false);
@@ -52,7 +39,6 @@ int main()
 
 	while (true) {
 		char buff[4096];
-		//fscanf(Con::fpin, "%s", buff);
 		fgets(buff, 4000, Con::fpin);
 		setRunString(buff);
 	}

@@ -2,15 +2,11 @@
 #define SAFE_RELEASE(x) if (x) { x->Release(); x = NULL; }
 
 ID3D11Buffer* pStageBufferA = NULL;
-ID3D11Buffer* CopyBufferToCpuA(ID3D11DeviceContext* pContext, ID3D11Device* pDevice, ID3D11Buffer* pBufferA)
-{
+ID3D11Buffer* CopyBufferToCpuA(ID3D11DeviceContext* pContext, ID3D11Device* pDevice, ID3D11Buffer* pBufferA) {
 	D3D11_BUFFER_DESC CBDescA;
 	pBufferA->GetDesc(&CBDescA);
 
-	if (pStageBufferA == NULL)
-	{
-		//Log("onceA");
-		// create buffer
+	if (pStageBufferA == NULL) {
 		D3D11_BUFFER_DESC descA;
 		descA.BindFlags = 0;
 		descA.ByteWidth = CBDescA.ByteWidth;
@@ -19,8 +15,7 @@ ID3D11Buffer* CopyBufferToCpuA(ID3D11DeviceContext* pContext, ID3D11Device* pDev
 		descA.StructureByteStride = 0;
 		descA.Usage = D3D11_USAGE_STAGING;
 
-		if (FAILED(pDevice->CreateBuffer(&descA, NULL, &pStageBufferA)))
-		{
+		if (FAILED(pDevice->CreateBuffer(&descA, NULL, &pStageBufferA))) {
 			//Log("CreateBuffer failed when CopyBufferToCpuA {}");
 		}
 	}
@@ -33,9 +28,7 @@ ID3D11Buffer* CopyBufferToCpuA(ID3D11DeviceContext* pContext, ID3D11Device* pDev
 
 static ID3D11Texture2D* texc = nullptr;
 static ID3D11ShaderResourceView* textureColor;
-void GenerateTexture(ID3D11Device* pDevice, uint32_t pixelcolor, DXGI_FORMAT format)//DXGI_FORMAT_R32G32B32A32_FLOAT DXGI_FORMAT_R8G8B8A8_UNORM
-{
-	//static const uint32_t pixelcolor = 0xff00ff00; //0xff00ff00 green, 0xffff0000 blue, 0xff0000ff red
+void GenerateTexture(ID3D11Device* pDevice, uint32_t pixelcolor, DXGI_FORMAT format) {
 	D3D11_SUBRESOURCE_DATA initData = { &pixelcolor, sizeof(uint32_t), 0 };
 
 	D3D11_TEXTURE2D_DESC desc;
@@ -61,17 +54,14 @@ void GenerateTexture(ID3D11Device* pDevice, uint32_t pixelcolor, DXGI_FORMAT for
 	pDevice->CreateShaderResourceView(texc, &srdes, &textureColor);
 }
 
-void MapBuffer(ID3D11DeviceContext* pContext, ID3D11Buffer* pStageBuffer, void** ppData, UINT* pByteWidth)
-{
+void MapBuffer(ID3D11DeviceContext* pContext, ID3D11Buffer* pStageBuffer, void** ppData, UINT* pByteWidth) {
 	D3D11_MAPPED_SUBRESOURCE subRes;
 	HRESULT res = pContext->Map(pStageBuffer, 0, D3D11_MAP_READ, 0, &subRes);
 
 	D3D11_BUFFER_DESC desc;
 	pStageBuffer->GetDesc(&desc);
 
-	if (FAILED(res))
-	{
-		//Log("Map stage buffer failed {%d} {%d} {%d} {%d} {%d}", (void*)pStageBuffer, desc.ByteWidth, desc.BindFlags, desc.CPUAccessFlags, desc.Usage);
+	if (FAILED(res)) {
 		SAFE_RELEASE(pStageBuffer); return;
 	}
 
@@ -81,7 +71,6 @@ void MapBuffer(ID3D11DeviceContext* pContext, ID3D11Buffer* pStageBuffer, void**
 		*pByteWidth = desc.ByteWidth;
 }
 
-void UnmapBuffer(ID3D11DeviceContext* pContext, ID3D11Buffer* pStageBuffer)
-{
+void UnmapBuffer(ID3D11DeviceContext* pContext, ID3D11Buffer* pStageBuffer) {
 	pContext->Unmap(pStageBuffer, 0);
 }

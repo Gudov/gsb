@@ -55,7 +55,6 @@ void setDevConsoleState_hook(__int64 a1, unsigned __int8 a2) {
 }
 
 __int64 addFuncToLuaClass_hook(__int64 L, const char* name, void* func, unsigned int type, void* callHandler, void* luaClass) {
-
 	return FnCast("addFuncToLuaClass", or_addFuncToLuaClass)(L, name, func, type, callHandler, luaClass);
 }
 

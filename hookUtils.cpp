@@ -66,8 +66,7 @@ static void parsePattern(char* combo, char* pattern, char* mask) {
 	pattern[j] = mask[j] = '\0';
 }
 
-void* findSignatureImpl(unsigned char* data, unsigned char* sig, char* pattern)
-{
+void* findSignatureImpl(unsigned char* data, unsigned char* sig, char* pattern) {
 	while (true) {
 		data++;
 		size_t offset = 0;
@@ -80,8 +79,7 @@ void* findSignatureImpl(unsigned char* data, unsigned char* sig, char* pattern)
 	}
 }
 
-void* findSignatureImpl(unsigned char* data, const char* combopattern)
-{
+void* findSignatureImpl(unsigned char* data, const char* combopattern) {
 	unsigned char pattern[0x100] = { 0x0 };
 	char mask[0x100] = { 0x0 };
 	parsePattern((char*)combopattern, (char*)pattern, mask);
