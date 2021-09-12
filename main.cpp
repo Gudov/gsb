@@ -19,7 +19,7 @@
 #include "gameHooks.h"
 #include "luaExecutor.h"
 #include "hookUtils.h"
-//#include "dxHooks.h"
+#include "menu.h"
 #include "physics.h"
 #include "dxHooks2.h"
 
@@ -47,6 +47,8 @@ int main()
 	initDxHooks2();
 
 	pauseAllThreads(false);
+
+	loadConfig("gsb.cfg");
 
 	while (true) {
 		char buff[4096];

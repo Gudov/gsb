@@ -46,10 +46,10 @@ void loadConfig(std::string config_file)
 			 || d.value().contains("b")
 			 || d.value().contains("a")) {
 				ImColor* ptr = new ImColor();
-				ptr->Value.x = d.value().at("r").get<int>();
-				ptr->Value.y = d.value().at("g").get<int>();
-				ptr->Value.z = d.value().at("b").get<int>();
-				ptr->Value.w = d.value().at("a").get<int>();
+				ptr->Value.x = d.value().at("r").get<float>();
+				ptr->Value.y = d.value().at("g").get<float>();
+				ptr->Value.z = d.value().at("b").get<float>();
+				ptr->Value.w = d.value().at("a").get<float>();
 				options[d.key()] = ptr;
 			}
 		}

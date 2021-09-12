@@ -26,4 +26,5 @@ T getOption(std::string name) {
 	return T();
 }
 
+void loadConfig(std::string config_file);
 void drawMenu();
