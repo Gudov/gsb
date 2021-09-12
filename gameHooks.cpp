@@ -116,7 +116,6 @@ void* somePxStuff_hook(uint64_t a1) {
 	physx::PxVec3 pos = rigid->getGlobalPose().p;
 	physx::PxScene *scene = rigid->getScene();
 	physx::PxActor** Actors = (physx::PxActor**)malloc(8 * 4096);
-	physx::PxActorTypeFlag type;
 	fprintf(Con::fpout, "pos %.2f %.2f %.2f\n", pos.x, pos.y, pos.z);
 	fflush(Con::fpout);
 	return FnCast("somePxStuff", or_somePxStuff)((long long)a1);
@@ -128,7 +127,7 @@ __int64 getPxActorFromList_hook(__int64 list, int id) {
 }
 
 __int64 __fastcall setupGameConfig_hook(__int64 a1, unsigned int a2, __int64* preHashName, __int64 a4, __int64 a5, float value, int a7, __int64* a8, __int64* a9) {
-	fprintf(Con::fpout, "%s - %f\n", preHashName, value);
+	fprintf(Con::fpout, "%s - %f\n", (char*)preHashName, value);
 	fflush(Con::fpout);
 	return FnCast("setupGameConfig", or_setupGameConfig)(a1, a2, preHashName, a4, a5, value, a7, a8, a9);
 }
@@ -147,7 +146,7 @@ __int64 createClassInstance_hook(__int64 a1, unsigned int a2, char** a3, __int64
 		fflush(Con::fpout);
 
 		for (int i = 0x1A0; i <= 0x1CC; i += 4) {
-			fprintf(Con::fpout, "    %llx - %f\n", i, *(float*)(result + i));
+			fprintf(Con::fpout, "    %llx - %f\n", (uint64_t)i, *(float*)(result + i));
 			fflush(Con::fpout);
 		}
 	}

@@ -269,7 +269,7 @@ struct SceneRoot
     __int64 field_C8;
 };
 
-struct __declspec(align(4)) asteroidStruct
+struct asteroidStruct
 {
     __int64 ptr0;
     int ptr_data_0_0;

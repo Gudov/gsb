@@ -116,7 +116,7 @@ void drawAsteroidESP(bodyData ply) {
 	const char* filterOre = getOption<std::string>("asteroidFilter").c_str();
 	AsteroidRenderingSettings renderSettings = loadRenderingSettings();
 
-	for (uint32_t i = 0; i < maxObjects; i++) {
+	for (uint64_t i = 0; i < maxObjects; i++) {
 		asteroidStruct* object = (asteroidStruct*)((*(uint64_t*)(objectManager + 0x60060) & 0xFFFFFFFFFFFFFFFCui64) + (0x120 * i));
 		if (testObjectPtr(object)) {
 			continue;
@@ -135,7 +135,7 @@ void drawAsteroidESP(bodyData ply) {
 		float dist = sqrtf((localPos.x * localPos.x) + (localPos.y * localPos.y) + (localPos.z * localPos.z));
 
 		if (asteroidsSubData.size() <= i) {
-			asteroidsSubData.resize(i * 1.2f);
+			asteroidsSubData.resize(uint64_t(i * 1.2));
 		}
 
 		if (dist > 600) {
