@@ -21,39 +21,60 @@ struct AsteroidCache {
 	uint32_t ind;
 };
 
+struct AsteroidRenderingSettings {
+	bool drawLine;
+	bool drawNear;
+	bool drawFar;
+	float farDistance;
+	ImColor farColor;
+	ImColor lineFarColor;
+	ImColor nearColor;
+};
+
 static std::vector<AsteroidSubData> asteroidsSubData;
 static std::vector<AsteroidCache> asteroidsCache;
 
-static void drawAsteroid(physx::PxVec3 &pos, char* text, float dist, bool drawLine, bool drawNear, bool drawFar, ImGuiIO &io) {
-	if (dist > 3000 && drawFar) {
+static void drawAsteroid(physx::PxVec3 &pos, char* text, float dist, AsteroidRenderingSettings settings, ImGuiIO &io) {
+	if (dist > settings.farDistance && settings.drawFar) {
 		physx::PxVec2 screenPos = worldToScreen(pos);
 		if (screenPos.x > 0 && screenPos.y > 0) {
-			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), Colors::farAsteroid, text, 0, 0.0f, 0);
+			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), settings.farColor, text, 0, 0.0f, 0);
 		}
-		if (drawLine) {
+		if (settings.drawLine) {
 			physx::PxVec2 linePos = worldToScreenIgnoreDirection(pos);
-			ImGui::GetWindowDrawList()->AddLine(ImVec2(linePos.x, linePos.y), ImVec2(io.DisplaySize.x / 2, io.DisplaySize.y / 2), Colors::lineFarAsteroid);
+			ImGui::GetWindowDrawList()->AddLine(ImVec2(linePos.x, linePos.y), ImVec2(io.DisplaySize.x / 2, io.DisplaySize.y / 2), settings.lineFarColor);
 		}
-	} else if (drawNear) {
+	} else if (settings.drawNear) {
 		physx::PxVec2 screenPos = worldToScreen(pos);
 		if (screenPos.x > 0 && screenPos.y > 0) {
-			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), Colors::nearAsteroid, text, 0, 0.0f, 0);
+			ImGui::GetWindowDrawList()->AddText(ImGui::GetFont(), ImGui::GetFontSize(), ImVec2(screenPos.x, screenPos.y), settings.nearColor, text, 0, 0.0f, 0);
 		}
 	}
 }
 
+static AsteroidRenderingSettings loadRenderingSettings() {
+	AsteroidRenderingSettings settings;
+	settings.drawLine = getOption<bool>("drawAsteroidLine");
+	settings.drawFar = getOption<bool>("drawFarAsteroid");
+	settings.drawLine = getOption<bool>("drawAsteroidLine");
+	settings.farDistance = getOption<float>("farAsteroidDistance");
+	settings.farColor = getOption<ImColor>("farAsteroidColor");
+	settings.nearColor = getOption<ImColor>("nearAstreoidColor");
+	settings.lineFarColor = getOption<ImColor>("lineAsteroidColor");
+
+	return settings;
+}
+
 static void drawAsteroidsFromCache(bodyData ply) {
 	ImGuiIO io = ImGui::GetIO();
-	bool drawNear = getOptionBool("drawNearAsteroid", true);
-	bool drawFar = getOptionBool("drawFarAsteroid", true);
-	bool drawLine = getOptionBool("drawAsteroidLine", true);
+	AsteroidRenderingSettings settings = loadRenderingSettings();
 
 	for (auto &asteroid : asteroidsCache) {
 		physx::PxVec3 localPos = ply.pos - asteroid.pos;
 		float dist = sqrtf((localPos.x * localPos.x) + (localPos.y * localPos.y) + (localPos.z * localPos.z));
 		char buff[256];
 		sprintf(buff, "%s %.0f %0.f", asteroid.type, asteroid.dist, dist);
-		drawAsteroid(asteroid.pos, buff, asteroid.dist, drawLine, drawNear, drawFar, io);
+		drawAsteroid(asteroid.pos, buff, asteroid.dist, settings, io);
 	}
 }
 
@@ -72,7 +93,7 @@ static bool testObjectPtr(asteroidStruct* object) {
 
 void drawAsteroidESP(bodyData ply) {
 
-	bool asteroidEspEnabled = getOptionBool("asteroidEspEnabled", false);
+	bool asteroidEspEnabled = getOption<bool>("asteroidEspEnabled");
 	if (!asteroidEspEnabled) return;
 
 	if (objectManager == 0) {
@@ -91,11 +112,9 @@ void drawAsteroidESP(bodyData ply) {
 	uint32_t maxObjects = *(uint32_t*)(objectManager + 0x60068);
 
 	ImGuiIO io = ImGui::GetIO();
-	bool checkOre = getOptionBool("asteroidOreCheck", true);
-	char* filterOre = getOptionString("asteroidFilter", "ore");
-	bool drawNear = getOptionBool("drawNearAsteroid", true);
-	bool drawFar = getOptionBool("drawFarAsteroid", true);
-	bool drawLine = getOptionBool("drawAsteroidLine", true);
+	bool checkOre = getOption<bool>("asteroidOreCheck");
+	const char* filterOre = getOption<std::string>("asteroidFilter").c_str();
+	AsteroidRenderingSettings renderSettings = loadRenderingSettings();
 
 	for (uint32_t i = 0; i < maxObjects; i++) {
 		asteroidStruct* object = (asteroidStruct*)((*(uint64_t*)(objectManager + 0x60060) & 0xFFFFFFFFFFFFFFFCui64) + (0x120 * i));
@@ -134,7 +153,7 @@ void drawAsteroidESP(bodyData ply) {
 		float maxDist = (asteroidsSubData[i].ptr == object) ? asteroidsSubData[i].maxDist : 0;
 		char buff[256];
 		sprintf(buff, "%s %.0f %0.f", object->type, asteroidsSubData[i].maxDist, dist);
-		drawAsteroid(objectPos, buff, maxDist, drawLine, drawNear, drawFar, io);
+		drawAsteroid(objectPos, buff, maxDist, renderSettings, io);
 
 		AsteroidCache cache;
 		cache.ind = i;

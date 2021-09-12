@@ -10,7 +10,7 @@
 void drawPhisicEsp(std::vector<bodyData>& bodys, bodyData ply) {
 	char buff[256];
 
-	if (!getOptionBool("drawPhysMass", false)) {
+	if (!getOption<bool>("drawPhysMass")) {
 		return;
 	}
 
