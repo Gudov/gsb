@@ -56,7 +56,7 @@ static AsteroidRenderingSettings loadRenderingSettings() {
 	AsteroidRenderingSettings settings;
 	settings.drawLine = getOption<bool>("drawAsteroidLine");
 	settings.drawFar = getOption<bool>("drawFarAsteroid");
-	settings.drawLine = getOption<bool>("drawAsteroidLine");
+	settings.drawNear = getOption<bool>("drawNearAsteroid");
 	settings.farDistance = getOption<float>("farAsteroidDistance");
 	settings.farColor = getOption<ImColor>("farAsteroidColor");
 	settings.nearColor = getOption<ImColor>("nearAstreoidColor");

@@ -123,6 +123,11 @@ inline void ImGuiSettingEditColor4(const char *name) {
 inline void ImGuiSettingCheckBox(const char* name) {
 	ImGui::Checkbox(name, getOptionPtr<bool>(name));
 }
+//SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, float power)
+inline void ImGuiSettingSlider(const char* name) {
+	ImGui::SliderFloat(name, getOptionPtr<float>(name),2000.0f,9999.0f);
+}
+
 
 void drawMenu() {
 	const ImGuiColorEditFlags colorEditFlags = ImGuiColorEditFlags_AlphaPreview | ImGuiColorEditFlags_NoInputs | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoLabel;
@@ -156,6 +161,7 @@ void drawMenu() {
 		ImGuiSettingEditColor4("farAsteroidColor");
 		ImGui::SameLine();
 		ImGuiSettingCheckBox("drawFarAsteroid");
+		ImGuiSettingSlider("farAsteroidDistance");
 
 		ImGuiSettingEditColor4("lineAsteroidColor");
 		ImGui::SameLine();
