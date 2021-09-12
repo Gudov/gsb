@@ -134,7 +134,7 @@ void drawAsteroidESP(bodyData ply) {
 		float dist = sqrtf((localPos.x * localPos.x) + (localPos.y * localPos.y) + (localPos.z * localPos.z));
 
 		if (asteroidsSubData.size() <= i) {
-			asteroidsSubData.resize(uint64_t(i * 1.2));
+			asteroidsSubData.resize(uint64_t((i+1) * 1.2));
 		}
 
 		if (dist > 600) {
